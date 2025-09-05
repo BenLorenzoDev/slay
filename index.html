@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Interactive Chat Experience</title>
+    <title>Ben Lorenzo - Workflow & Automation Architect</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,37 +11,51 @@
 </head>
 <body>
     <canvas id="galaxy-canvas"></canvas>
-    <div class="hero-container">
-        <!-- Left Side - Profile Image -->
-        <div class="profile-section">
+    
+    <!-- Section 1: Hero Introduction -->
+    <section class="hero-section" id="hero">
+        <div class="hero-content">
             <div class="profile-image-wrapper">
-                <img src="assets/images/me.jpg" alt="Profile Picture" class="profile-image">
+                <img src="assets/images/me.jpg" alt="Ben Lorenzo" class="profile-image">
                 <div class="profile-status">
                     <span class="status-dot"></span>
                     <span>Available for opportunities</span>
                 </div>
             </div>
             <div class="profile-info">
-                <h1 class="profile-name">Meet Ben!</h1>
+                <h1 class="profile-name">Ben Lorenzo</h1>
                 <p class="profile-title">Workflow & Automation Architect</p>
+                <div class="profile-specialties">
+                    <div class="specialty-tag">Process Automation</div>
+                    <div class="specialty-tag">Systems Integration</div>
+                    <div class="specialty-tag">Workflow Optimization</div>
+                    <div class="specialty-tag">DevOps</div>
+                </div>
+                <p class="profile-tagline">Transforming complex processes into elegant automated solutions</p>
+            </div>
+            <div class="scroll-indicator" onclick="document.getElementById('chat').scrollIntoView({behavior: 'smooth'})">
+                <span>Let's chat</span>
+                <div class="scroll-arrow">↓</div>
             </div>
         </div>
+    </section>
 
-        <!-- Middle - Interactive Chatbox -->
-        <div class="chat-section">
+    <!-- Section 2: Full Page Chat -->
+    <section class="chat-fullpage" id="chat">
+        <div class="chat-container-wrapper">
             <div class="chat-container">
                 <div class="chat-header">
                     <div class="chat-header-info">
                         <div class="chat-avatar">
-                            <span>YN</span>
+                            <span>BL</span>
                         </div>
                         <div class="chat-header-text">
-                            <h3>Chat with Me</h3>
+                            <h3>Chat with Ben</h3>
                             <p>Active now</p>
                         </div>
                     </div>
                     <div class="chat-header-actions">
-                        <button class="minimize-btn">−</button>
+                        <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
                     </div>
                 </div>
 
@@ -103,8 +117,7 @@
                 </div>
             </div>
         </div>
-
-    </div>
+    </section>
     
     <div class="attribution">Inspired by Mark Renzo</div>
 
