@@ -164,6 +164,32 @@ function handleCustomMessage(message) {
     }
 }
 
+// Focus mode handling
+let focusModeTimer;
+
+chatInput.addEventListener('focus', () => {
+    document.body.classList.add('focus-mode');
+});
+
+chatInput.addEventListener('input', () => {
+    clearTimeout(focusModeTimer);
+    document.body.classList.add('focus-mode');
+    
+    // Keep focus mode active while typing
+    if (chatInput.value.length > 0) {
+        clearTimeout(focusModeTimer);
+    }
+});
+
+chatInput.addEventListener('blur', () => {
+    // Exit focus mode after a delay when input loses focus and is empty
+    if (chatInput.value.length === 0) {
+        focusModeTimer = setTimeout(() => {
+            document.body.classList.remove('focus-mode');
+        }, 500);
+    }
+});
+
 // Handle send button and enter key
 sendBtn.addEventListener('click', sendMessage);
 chatInput.addEventListener('keypress', (e) => {
@@ -180,6 +206,11 @@ function sendMessage() {
         
         // Clear input
         chatInput.value = '';
+        
+        // Exit focus mode after sending
+        setTimeout(() => {
+            document.body.classList.remove('focus-mode');
+        }, 1000);
         
         // Show typing indicator
         const typingIndicator = showTypingIndicator();
