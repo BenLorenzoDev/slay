@@ -1,247 +1,309 @@
-// Chat functionality
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const quickButtons = document.querySelectorAll('.quick-btn');
-
-// Response data for different topics
-const responses = {
-    about: {
-        messages: [
-            "Great question! Let me tell you about myself...",
-            "I'm a passionate Full-Stack Developer with a love for creating meaningful digital experiences. My journey in tech started with curiosity and has grown into a career dedicated to solving problems through code.",
-            "I specialize in modern web technologies and enjoy working on both frontend and backend challenges. When I'm not coding, you'll find me exploring new technologies, contributing to open source, or enjoying a good game of chess.",
-            "I believe in writing clean, maintainable code and creating user experiences that make a difference."
-        ]
-    },
-    superpowers: {
-        messages: [
-            "Ah, my superpowers! Let me share what I bring to the table... ⚡",
-            "🚀 **Frontend Magic**: React, Vue.js, TypeScript, and creating pixel-perfect, responsive designs that users love",
-            "⚙️ **Backend Wizardry**: Node.js, Python, PostgreSQL, MongoDB - I can architect scalable solutions that perform",
-            "☁️ **Cloud Mastery**: AWS, Docker, CI/CD pipelines - I ensure smooth deployments and reliable infrastructure",
-            "🎨 **Design Sense**: I bridge the gap between design and development, turning mockups into living, breathing applications",
-            "🧠 **Problem Solving**: Complex algorithms? System design? I love tackling challenges that make me think!"
-        ]
-    },
-    projects: {
-        messages: [
-            "I'd love to show you some of my recent work! 💼",
-            "**E-Commerce Platform** 🛍️\nBuilt a full-stack marketplace with React, Node.js, and Stripe integration. Features real-time inventory, secure payments, and an admin dashboard. 50k+ transactions processed.",
-            "**Task Management SaaS** 📊\nDeveloped a collaborative project management tool using Vue.js and GraphQL. Includes real-time updates, team collaboration features, and advanced analytics.",
-            "**AI-Powered Chat Application** 🤖\nCreated an intelligent chatbot using Python, TensorFlow, and WebSocket for real-time communication. Handles 1000+ concurrent users.",
-            "**Open Source Contributions** 🌟\nRegular contributor to several popular repositories. My PRs have helped improve developer experience for thousands of users.",
-            "Want to see live demos or GitHub repos? Just ask!"
-        ]
-    },
-    experience: {
-        messages: [
-            "Here's my professional journey so far! 🎯",
-            "**Senior Full-Stack Developer** | TechCorp (2021-Present)\n• Led development of microservices architecture serving 2M+ users\n• Reduced API response time by 60% through optimization\n• Mentored junior developers and conducted code reviews",
-            "**Full-Stack Developer** | StartupXYZ (2019-2021)\n• Built MVP from scratch that secured $2M in funding\n• Implemented CI/CD pipeline reducing deployment time by 80%\n• Worked directly with clients to gather requirements",
-            "**Frontend Developer** | Digital Agency (2018-2019)\n• Developed responsive websites for 20+ clients\n• Improved site performance scores by average of 40%\n• Introduced modern development practices to the team",
-            "**Education** 🎓\nBachelor's in Computer Science | Tech University\nContinuous learner through online courses and certifications"
-        ]
-    },
-    contact: {
-        messages: [
-            "I'd love to connect with you! 📧",
-            "Here are the best ways to reach me:",
-            "📧 **Email**: your.email@example.com\n💼 **LinkedIn**: linkedin.com/in/yourprofile\n🐙 **GitHub**: github.com/yourusername\n🐦 **Twitter**: @yourhandle",
-            "📱 **Phone**: Available upon request\n📍 **Location**: Open to remote opportunities worldwide",
-            "Whether you have a project in mind, want to collaborate, or just want to say hi, I'm always happy to chat!",
-            "Response time: Usually within 24 hours ⏰"
-        ]
-    },
-    fun: {
-        messages: [
-            "Oh, you want to know the fun stuff? Here we go! 🎮",
-            "🎯 **Hobbies**: Gaming (especially indie games), Chess, Photography, and Building mechanical keyboards",
-            "📚 **Currently Reading**: 'Clean Architecture' by Robert C. Martin",
-            "🎵 **Coding Playlist**: Lo-fi beats and synthwave - helps me get in the zone!",
-            "☕ **Coffee or Tea?**: Coffee, definitely coffee. My code runs on caffeine!",
-            "🎮 **Favorite Game**: Currently obsessed with Hades II",
-            "🌟 **Fun Fact**: I once debugged a production issue while on a mountain hiking trip using just my phone!",
-            "Want to know more? Feel free to ask anything!"
-        ]
-    },
-    availability: {
-        messages: [
-            "Great question about my availability! 🚀",
-            "✅ **Currently Open to Work**: Yes! I'm actively looking for exciting opportunities",
-            "🌍 **Remote Friendly**: 100% - I've been successfully working remotely for years with teams across different time zones",
-            "📍 **Location Flexible**: Open to remote, hybrid, or on-site positions for the right opportunity",
-            "⏰ **Availability**: Can start immediately or with standard notice period",
-            "💼 **Ideal Roles**: Workflow & Automation Architect, DevOps Engineer, Systems Integration Specialist, or similar positions where I can design and implement efficient automated solutions",
-            "🎯 **Work Preferences**:\n• Full-time or long-term contract positions\n• Projects involving workflow optimization and automation\n• Teams that value innovation and efficiency",
-            "Let's discuss how I can help transform your workflows and processes! Feel free to reach out through the 'Let's Connect' option."
-        ]
+// Main JavaScript for Professional Portfolio Site
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Mobile Navigation Toggle
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (navToggle) {
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
     }
-};
-
-// Add typing indicator
-function showTypingIndicator() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message bot-message typing-message';
-    typingDiv.innerHTML = `
-        <div class="typing-indicator">
-            <span class="typing-dot"></span>
-            <span class="typing-dot"></span>
-            <span class="typing-dot"></span>
-        </div>
-    `;
-    chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return typingDiv;
-}
-
-// Add message to chat
-function addMessage(message, isUser = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'} appear`;
     
-    // Parse markdown-style bold text
-    const formattedMessage = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
-    messageDiv.innerHTML = `
-        <div class="message-bubble">
-            <p>${formattedMessage.replace(/\n/g, '<br>')}</p>
-        </div>
-    `;
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Handle quick button clicks
-quickButtons.forEach(button => {
-    button.addEventListener('click', async () => {
-        const action = button.getAttribute('data-action');
-        const buttonText = button.textContent.trim();
-        
-        // Add user message
-        addMessage(buttonText, true);
-        
-        // Show typing indicator
-        const typingIndicator = showTypingIndicator();
-        
-        // Get responses for this action
-        const actionResponses = responses[action];
-        
-        if (actionResponses) {
-            // Remove typing indicator before showing messages
-            setTimeout(() => {
-                typingIndicator.remove();
-                
-                // Add bot messages with delays
-                actionResponses.messages.forEach((message, index) => {
-                    setTimeout(() => {
-                        addMessage(message);
-                    }, index * 800); // 800ms delay between messages
+    // Smooth Scroll for Navigation Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
                 });
-            }, 1500); // Initial typing delay
+                
+                // Close mobile menu if open
+                if (navMenu && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    if (navToggle) navToggle.classList.remove('active');
+                }
+            }
+        });
+    });
+    
+    // Navbar Background on Scroll
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(15, 15, 15, 0.98)';
+                navbar.style.backdropFilter = 'blur(15px)';
+            } else {
+                navbar.style.background = 'rgba(15, 15, 15, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            }
+        });
+    }
+    
+    // Active Navigation Link Highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    function setActiveNav() {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').slice(1) === current) {
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    window.addEventListener('scroll', setActiveNav);
+    
+    // Contact Form Submission
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Here you would normally send the data to a server
+            console.log('Form submitted:', data);
+            
+            // Show success message
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.textContent;
+            button.textContent = 'Message Sent!';
+            button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            
+            // Reset form
+            this.reset();
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 3000);
+        });
+    }
+    
+    // Intersection Observer for Scroll Animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for animation
+    document.querySelectorAll('.service-card, .project-card, .skill-category').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+    
+    // Add animate class styles dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+        .animate {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
         }
+        
+        .nav-menu.active {
+            display: flex !important;
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: rgba(15, 15, 15, 0.98);
+            flex-direction: column;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .nav-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .nav-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active::after {
+            width: 100%;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Typing Effect for Hero Title
+    const titleMain = document.querySelector('.title-main');
+    if (titleMain) {
+        const text = titleMain.textContent;
+        titleMain.textContent = '';
+        titleMain.style.minHeight = '1.2em';
+        let index = 0;
+        
+        function typeText() {
+            if (index < text.length) {
+                titleMain.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeText, 50);
+            }
+        }
+        
+        // Start typing after a short delay
+        setTimeout(typeText, 500);
+    }
+    
+    // Parallax Effect for Hero Visual
+    const visualContainer = document.querySelector('.visual-container');
+    if (visualContainer) {
+        window.addEventListener('mousemove', (e) => {
+            const x = (e.clientX - window.innerWidth / 2) / 50;
+            const y = (e.clientY - window.innerHeight / 2) / 50;
+            
+            visualContainer.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+        });
+        
+        // Reset on mouse leave
+        document.addEventListener('mouseleave', () => {
+            visualContainer.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+        });
+    }
+    
+    // Stats Counter Animation
+    const stats = document.querySelectorAll('.stat-number');
+    const statsObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const stat = entry.target;
+                const finalValue = stat.textContent;
+                const isPercentage = finalValue.includes('%');
+                const isPlusSign = finalValue.includes('+');
+                const numericValue = parseInt(finalValue.replace(/[^0-9]/g, ''));
+                let currentValue = 0;
+                
+                const increment = numericValue / 50;
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= numericValue) {
+                        currentValue = numericValue;
+                        clearInterval(timer);
+                    }
+                    
+                    let displayValue = Math.floor(currentValue);
+                    if (isPercentage) displayValue += '%';
+                    if (isPlusSign) displayValue += '+';
+                    stat.textContent = displayValue;
+                }, 30);
+                
+                statsObserver.unobserve(stat);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    stats.forEach(stat => {
+        statsObserver.observe(stat);
     });
-});
-
-// Handle custom messages
-function handleCustomMessage(message) {
-    // Simple keyword-based responses
-    const lowerMessage = message.toLowerCase();
     
-    if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-        return ["Hello there! 👋", "How can I help you today?"];
-    } else if (lowerMessage.includes('thank')) {
-        return ["You're welcome!", "Happy to help! Feel free to ask anything else."];
-    } else if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
-        return ["Goodbye! It was great chatting with you!", "Feel free to come back anytime! 👋"];
-    } else if (lowerMessage.includes('resume') || lowerMessage.includes('cv')) {
-        return ["I'd be happy to share my resume!", "You can download it from the link in the contact section, or I can email it to you directly."];
-    } else if (lowerMessage.includes('hire') || lowerMessage.includes('job') || lowerMessage.includes('work')) {
-        return ["I'm currently open to new opportunities!", "I'd love to discuss how I can contribute to your team. Feel free to reach out through the contact information provided."];
-    } else {
-        return ["That's an interesting question!", "While I don't have a specific response prepared for that, feel free to reach out to me directly through the contact section and we can discuss it in detail!"];
-    }
-}
-
-// Focus mode handling
-let focusModeTimer;
-
-chatInput.addEventListener('focus', () => {
-    document.body.classList.add('focus-mode');
-});
-
-chatInput.addEventListener('input', () => {
-    clearTimeout(focusModeTimer);
-    document.body.classList.add('focus-mode');
+    // Project Cards Hover Effect
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
     
-    // Keep focus mode active while typing
-    if (chatInput.value.length > 0) {
-        clearTimeout(focusModeTimer);
-    }
-});
-
-chatInput.addEventListener('blur', () => {
-    // Exit focus mode after a delay when input loses focus and is empty
-    if (chatInput.value.length === 0) {
-        focusModeTimer = setTimeout(() => {
-            document.body.classList.remove('focus-mode');
-        }, 500);
-    }
-});
-
-// Handle send button and enter key
-sendBtn.addEventListener('click', sendMessage);
-chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        sendMessage();
-    }
-});
-
-function sendMessage() {
-    const message = chatInput.value.trim();
-    if (message) {
-        // Add user message
-        addMessage(message, true);
-        
-        // Clear input
-        chatInput.value = '';
-        
-        // Exit focus mode after sending
-        setTimeout(() => {
-            document.body.classList.remove('focus-mode');
-        }, 1000);
-        
-        // Show typing indicator
-        const typingIndicator = showTypingIndicator();
-        
-        // Get and display bot response
-        setTimeout(() => {
-            typingIndicator.remove();
-            const responses = handleCustomMessage(message);
-            responses.forEach((response, index) => {
+    // Service Cards Stagger Animation
+    const serviceCards = document.querySelectorAll('.service-card');
+    const serviceObserver = new IntersectionObserver(function(entries) {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
                 setTimeout(() => {
-                    addMessage(response);
-                }, index * 600);
-            });
-        }, 1000);
-    }
-}
-
-// Add some initial animation to the buttons
-document.addEventListener('DOMContentLoaded', () => {
-    quickButtons.forEach((button, index) => {
-        button.style.opacity = '0';
-        button.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-            button.style.transition = 'all 0.5s ease';
-            button.style.opacity = '1';
-            button.style.transform = 'translateY(0)';
-        }, 1000 + (index * 100));
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+                serviceObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    serviceCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        serviceObserver.observe(card);
     });
+    
+    // Smooth Fade-In for Sections
+    const fadeElements = document.querySelectorAll('.section-header, .about-content, .contact-content');
+    const fadeObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                fadeObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    fadeElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        fadeObserver.observe(element);
+    });
+    
+    // Initialize Orbit Animation Enhancement
+    const orbits = document.querySelectorAll('.orbit');
+    orbits.forEach((orbit, index) => {
+        orbit.style.animationDelay = `${index * 0.2}s`;
+    });
+    
+    // Add Loading Complete Class
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 100);
+    
+    // Console Easter Egg
+    console.log('%c Welcome to Ben Lorenzo\'s Portfolio! 🚀', 
+        'color: #9333ea; font-size: 20px; font-weight: bold; text-shadow: 2px 2px 4px rgba(147, 51, 234, 0.3);');
+    console.log('%c Looking for a developer? Let\'s connect!', 
+        'color: #3b82f6; font-size: 14px;');
+    console.log('%c Email: ben@benlorenzo.dev', 
+        'color: #10b981; font-size: 12px;');
 });
-
-// Scroll to top when page loads on chat section
-if (window.location.hash === '#chat') {
-    document.getElementById('chatMessages').scrollTop = 0;
-}
