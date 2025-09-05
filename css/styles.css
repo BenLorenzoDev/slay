@@ -127,7 +127,7 @@ body {
 /* Chat Section - Middle */
 .chat-section {
     flex: 1;
-    max-width: 600px;
+    max-width: 900px;
     height: 700px;
     animation: fadeInUp 0.8s ease-out 0.2s both;
 }
@@ -303,25 +303,47 @@ body {
 }
 
 .quick-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 0.5rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.quick-buttons::-webkit-scrollbar {
+    height: 4px;
+}
+
+.quick-buttons::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.quick-buttons::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 2px;
+}
+
+.quick-buttons::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
 }
 
 .quick-btn {
     background: white;
     border: 2px solid #e5e7eb;
     border-radius: 12px;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.8rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
     color: #374151;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     justify-content: center;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .quick-btn:hover {
@@ -333,7 +355,7 @@ body {
 }
 
 .btn-icon {
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 /* Chat Input */
@@ -470,7 +492,8 @@ body {
 
 @media (max-width: 576px) {
     .quick-buttons {
-        grid-template-columns: repeat(2, 1fr);
+        display: flex;
+        overflow-x: auto;
     }
     
     .profile-image {
