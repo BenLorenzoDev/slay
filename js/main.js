@@ -78,21 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Parallax effect for hero photo
-    const heroPhoto = document.querySelector('.hero-photo-wrapper');
-    if (heroPhoto) {
-        window.addEventListener('mousemove', (e) => {
-            const x = (e.clientX - window.innerWidth / 2) / 100;
-            const y = (e.clientY - window.innerHeight / 2) / 100;
-            
-            heroPhoto.style.transform = `translate(${x}px, ${y}px)`;
-        });
-        
-        // Reset on mouse leave
-        document.addEventListener('mouseleave', () => {
-            heroPhoto.style.transform = 'translate(0, 0)';
-        });
-    }
+    // Removed parallax effect for performance
     
     // Intersection Observer for scroll animations
     const observerOptions = {

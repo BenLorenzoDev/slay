@@ -27,7 +27,7 @@
             this.dx = dx * 0.1;
             this.dy = dy * 0.1;
             this.life = 1;
-            this.decay = 0.02;
+            this.decay = 0.03; // Faster decay for performance
             this.size = Math.random() * 3 + 1;
             this.maxSize = this.size * 2;
             this.growth = 0.05;
@@ -166,7 +166,7 @@
         
         // Create particles based on movement speed
         if (distance > 2) {
-            const particleCount = Math.min(Math.floor(distance / 5), 3);
+            const particleCount = Math.min(Math.floor(distance / 8), 2); // Fewer particles for performance
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new TrailParticle(
                     mouseX + (Math.random() - 0.5) * 5,
@@ -227,8 +227,8 @@
         }
         
         // Limit particle count for performance
-        if (particles.length > 50) {
-            particles.splice(0, particles.length - 50);
+        if (particles.length > 30) {
+            particles.splice(0, particles.length - 30);
         }
         
         requestAnimationFrame(animate);
