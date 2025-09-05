@@ -1,4 +1,4 @@
-// Galaxy Animation - Smooth Interactive Milky Way Rainbow Effect
+// Smoke Animation - Subtle and Elegant Background Effect
 const canvas = document.getElementById('galaxy-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -14,380 +14,252 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Mouse position tracking with smoothing
-let mouse = {
-    x: canvas.width / 2,
-    y: canvas.height / 2,
-    targetX: canvas.width / 2,
-    targetY: canvas.height / 2,
-    isMoving: false,
-    velocity: { x: 0, y: 0 }
-};
-
-// Smooth mouse position interpolation
-function updateMousePosition() {
-    // Smooth interpolation
-    const ease = 0.15;
-    mouse.x += (mouse.targetX - mouse.x) * ease;
-    mouse.y += (mouse.targetY - mouse.y) * ease;
-    
-    // Calculate velocity for smoother particle generation
-    mouse.velocity.x = mouse.targetX - mouse.x;
-    mouse.velocity.y = mouse.targetY - mouse.y;
-}
-
-// Update mouse target position
-document.addEventListener('mousemove', (e) => {
-    mouse.targetX = e.clientX;
-    mouse.targetY = e.clientY;
-    mouse.isMoving = true;
-    
-    clearTimeout(mouse.timer);
-    mouse.timer = setTimeout(() => {
-        mouse.isMoving = false;
-    }, 150);
-});
-
-// Touch support for mobile
-document.addEventListener('touchmove', (e) => {
-    if (e.touches.length > 0) {
-        mouse.targetX = e.touches[0].clientX;
-        mouse.targetY = e.touches[0].clientY;
-        mouse.isMoving = true;
-    }
-});
-
-// Smooth Particle class
-class Particle {
-    constructor(x, y, hue, size = null) {
+// Smoke Particle class
+class SmokeParticle {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = size || (Math.random() * 2 + 0.5);
-        // Much gentler speeds for smoother movement
-        this.speedX = (Math.random() - 0.5) * 1;
-        this.speedY = (Math.random() - 0.5) * 1;
-        this.color = hue;
-        this.life = 1;
-        this.decay = Math.random() * 0.003 + 0.002; // Slower decay
-        this.trail = [];
-        this.maxTrailLength = 15;
-        // Add acceleration for natural movement
-        this.accX = 0;
-        this.accY = 0;
+        this.size = Math.random() * 80 + 40;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = Math.random() * -0.8 - 0.2;
+        this.opacity = 0;
+        this.targetOpacity = Math.random() * 0.08 + 0.02;
+        this.life = 0;
+        this.maxLife = Math.random() * 200 + 300;
+        this.angle = Math.random() * Math.PI * 2;
+        this.angleSpeed = (Math.random() - 0.5) * 0.02;
+        this.growing = true;
     }
 
     update() {
-        // Store trail position
-        if (Math.random() > 0.3) { // Don't store every frame for performance
-            this.trail.push({ 
-                x: this.x, 
-                y: this.y, 
-                life: this.life,
-                size: this.size 
-            });
-            if (this.trail.length > this.maxTrailLength) {
-                this.trail.shift();
-            }
+        // Update life cycle
+        this.life++;
+        
+        // Fade in effect
+        if (this.growing && this.opacity < this.targetOpacity) {
+            this.opacity += 0.001;
         }
-
-        // Apply acceleration for organic movement
-        this.accX = (Math.random() - 0.5) * 0.05;
-        this.accY = (Math.random() - 0.5) * 0.05;
         
-        this.speedX += this.accX;
-        this.speedY += this.accY;
+        // Start fading when life is almost over
+        if (this.life > this.maxLife * 0.8) {
+            this.opacity -= 0.002;
+            this.growing = false;
+        }
         
-        // Apply friction for smoother movement
-        this.speedX *= 0.98;
-        this.speedY *= 0.98;
-        
-        // Update position
-        this.x += this.speedX;
+        // Natural upward drift
+        this.speedY *= 0.99;
         this.y += this.speedY;
         
-        // Gentle decay
-        this.life -= this.decay;
-        if (this.size > 0.1) this.size -= 0.005;
+        // Gentle horizontal sway using sine wave
+        this.x += this.speedX + Math.sin(this.life * 0.01) * 0.2;
+        
+        // Slow rotation
+        this.angle += this.angleSpeed;
+        
+        // Gradual size increase (smoke expands)
+        if (this.size < 200) {
+            this.size += 0.3;
+        }
+        
+        // Apply gentle wind effect
+        this.speedX += (Math.random() - 0.5) * 0.02;
+        this.speedX *= 0.98; // Damping
     }
 
     draw() {
         ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
         
-        // Draw smooth trail
-        if (this.trail.length > 1) {
-            ctx.beginPath();
-            ctx.moveTo(this.trail[0].x, this.trail[0].y);
-            
-            // Use quadratic curves for smoother trails
-            for (let i = 1; i < this.trail.length - 1; i++) {
-                const cp = this.trail[i];
-                const next = this.trail[i + 1];
-                const midX = (cp.x + next.x) / 2;
-                const midY = (cp.y + next.y) / 2;
-                
-                ctx.quadraticCurveTo(cp.x, cp.y, midX, midY);
-            }
-            
-            // Gradient stroke for trail
-            const gradient = ctx.createLinearGradient(
-                this.trail[0].x, this.trail[0].y,
-                this.x, this.y
-            );
-            gradient.addColorStop(0, `hsla(${this.color}, 70%, 50%, 0)`);
-            gradient.addColorStop(0.5, `hsla(${this.color}, 80%, 55%, ${this.life * 0.2})`);
-            gradient.addColorStop(1, `hsla(${this.color}, 90%, 60%, ${this.life * 0.4})`);
-            
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = this.size * 2;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.globalAlpha = this.life * 0.6;
-            ctx.stroke();
-        }
+        // Create gradient for each smoke particle
+        const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size);
         
-        // Ultra-smooth glow effect
-        const glowSize = this.size * 8;
-        const gradient = ctx.createRadialGradient(
-            this.x, this.y, 0,
-            this.x, this.y, glowSize
-        );
+        // Soft white/gray smoke colors
+        const lightness = 85 + Math.random() * 10;
+        gradient.addColorStop(0, `hsla(250, 20%, ${lightness}%, ${this.opacity})`);
+        gradient.addColorStop(0.4, `hsla(250, 15%, ${lightness}%, ${this.opacity * 0.8})`);
+        gradient.addColorStop(0.7, `hsla(250, 10%, ${lightness}%, ${this.opacity * 0.4})`);
+        gradient.addColorStop(1, `hsla(250, 10%, ${lightness}%, 0)`);
         
-        gradient.addColorStop(0, `hsla(${this.color}, 100%, 70%, ${this.life * 0.6})`);
-        gradient.addColorStop(0.3, `hsla(${this.color}, 100%, 60%, ${this.life * 0.3})`);
-        gradient.addColorStop(0.6, `hsla(${this.color}, 90%, 50%, ${this.life * 0.1})`);
-        gradient.addColorStop(1, `hsla(${this.color}, 80%, 40%, 0)`);
-        
-        ctx.globalAlpha = this.life * 0.7;
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, glowSize, 0, Math.PI * 2);
+        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
         ctx.fill();
         
-        // Bright core with soft edges
-        ctx.globalAlpha = this.life;
-        ctx.fillStyle = `hsla(${this.color}, 100%, 90%, ${this.life * 0.8})`;
+        ctx.restore();
+    }
+}
+
+// Ambient floating particles for depth
+class AmbientParticle {
+    constructor() {
+        this.reset();
+        this.y = Math.random() * canvas.height;
+    }
+    
+    reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 50;
+        this.size = Math.random() * 3 + 1;
+        this.speedY = Math.random() * -0.5 - 0.1;
+        this.speedX = (Math.random() - 0.5) * 0.2;
+        this.opacity = Math.random() * 0.3 + 0.1;
+        this.pulse = Math.random() * Math.PI * 2;
+    }
+    
+    update() {
+        this.y += this.speedY;
+        this.x += this.speedX + Math.sin(this.pulse) * 0.3;
+        this.pulse += 0.02;
+        
+        // Reset when particle goes off screen
+        if (this.y < -50) {
+            this.reset();
+        }
+    }
+    
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity * Math.sin(this.pulse) * 0.5 + 0.5;
+        ctx.fillStyle = '#ffffff';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
-        
         ctx.restore();
     }
 }
 
-// Flowing trail system for ultra-smooth effect
-class FlowTrail {
-    constructor() {
-        this.points = [];
-        this.maxPoints = 40;
-    }
-    
-    addPoint(x, y, hue) {
-        this.points.push({
-            x: x,
-            y: y,
-            hue: hue,
-            life: 1,
-            size: 15
-        });
-        
-        if (this.points.length > this.maxPoints) {
-            this.points.shift();
-        }
-    }
-    
-    update() {
-        this.points.forEach(point => {
-            point.life -= 0.02;
-            point.size *= 0.98;
-        });
-        
-        this.points = this.points.filter(p => p.life > 0);
-    }
-    
-    draw() {
-        if (this.points.length < 2) return;
-        
-        ctx.save();
-        
-        // Draw smooth bezier curve through points
-        ctx.beginPath();
-        ctx.moveTo(this.points[0].x, this.points[0].y);
-        
-        for (let i = 0; i < this.points.length - 2; i++) {
-            const p0 = this.points[i];
-            const p1 = this.points[i + 1];
-            const p2 = this.points[i + 2];
-            
-            const cp1x = p1.x;
-            const cp1y = p1.y;
-            const cp2x = p1.x;
-            const cp2y = p1.y;
-            const endX = (p1.x + p2.x) / 2;
-            const endY = (p1.y + p2.y) / 2;
-            
-            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
-        }
-        
-        // Create flowing gradient
-        if (this.points.length > 1) {
-            const gradient = ctx.createLinearGradient(
-                this.points[0].x, this.points[0].y,
-                this.points[this.points.length - 1].x, 
-                this.points[this.points.length - 1].y
-            );
-            
-            this.points.forEach((point, index) => {
-                const position = index / (this.points.length - 1);
-                gradient.addColorStop(
-                    position, 
-                    `hsla(${point.hue}, 100%, 60%, ${point.life * 0.3})`
-                );
-            });
-            
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = 25;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.globalCompositeOperation = 'lighter';
-            ctx.globalAlpha = 0.4;
-            ctx.stroke();
-            
-            // Second pass for glow
-            ctx.lineWidth = 50;
-            ctx.globalAlpha = 0.1;
-            ctx.stroke();
-        }
-        
-        ctx.restore();
-    }
+// Initialize particles arrays
+const smokeParticles = [];
+const ambientParticles = [];
+
+// Create initial ambient particles
+for (let i = 0; i < 30; i++) {
+    ambientParticles.push(new AmbientParticle());
 }
 
-// Initialize smooth systems
-const particles = [];
-const flowTrail = new FlowTrail();
-const stars = [];
-let hue = 0;
+// Mouse interaction
+let mouseX = canvas.width / 2;
+let mouseY = canvas.height / 2;
+let isMouseMoving = false;
+let mouseTimer;
 
-// Create subtle background stars
-for (let i = 0; i < 80; i++) {
-    stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 1.5,
-        brightness: Math.random()
-    });
-}
+canvas.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    isMouseMoving = true;
+    
+    clearTimeout(mouseTimer);
+    mouseTimer = setTimeout(() => {
+        isMouseMoving = false;
+    }, 100);
+});
+
+// Touch support
+canvas.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+        isMouseMoving = true;
+        
+        clearTimeout(mouseTimer);
+        mouseTimer = setTimeout(() => {
+            isMouseMoving = false;
+        }, 100);
+    }
+});
+
+// Smoke generation timer
+let smokeGenerationTimer = 0;
 
 // Main animation loop
 function animate() {
-    // Ultra-smooth fade effect (smaller fade = smoother trails)
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.02)';
+    // Clear canvas with subtle fade
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Update smooth mouse position
-    updateMousePosition();
-    
-    // Draw stars with twinkle
-    ctx.save();
-    stars.forEach(star => {
-        star.brightness += (Math.random() - 0.5) * 0.01;
-        star.brightness = Math.max(0.2, Math.min(1, star.brightness));
-        
-        ctx.globalAlpha = star.brightness * 0.6;
-        ctx.fillStyle = 'white';
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-    });
-    ctx.restore();
-    
-    // Update and draw flow trail
-    if (mouse.isMoving) {
-        flowTrail.addPoint(mouse.x, mouse.y, hue);
-    }
-    flowTrail.update();
-    flowTrail.draw();
-    
-    // Generate smooth particle stream when mouse moves
-    if (mouse.isMoving) {
-        // Fewer particles but more consistent generation
-        if (Math.random() > 0.2) {
-            // Main particle at cursor
-            particles.push(new Particle(
-                mouse.x + (Math.random() - 0.5) * 10,
-                mouse.y + (Math.random() - 0.5) * 10,
-                hue
-            ));
-            
-            // Orbiting particles for richness
-            const angle = (Date.now() / 100) + Math.random() * Math.PI * 2;
-            const distance = 20 + Math.random() * 30;
-            particles.push(new Particle(
-                mouse.x + Math.cos(angle) * distance,
-                mouse.y + Math.sin(angle) * distance,
-                hue + 30,
-                Math.random() * 1.5 + 0.5
-            ));
-        }
-    }
-    
-    // Update and draw particles with smooth rendering
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen'; // Additive blending for glow
-    
-    particles.forEach((particle, index) => {
+    // Update and draw ambient particles
+    ambientParticles.forEach(particle => {
         particle.update();
         particle.draw();
-        
-        if (particle.life <= 0) {
-            particles.splice(index, 1);
-        }
     });
     
-    ctx.restore();
-    
-    // Smooth rainbow hue transition
-    hue += 0.5; // Slower color change for smoothness
-    if (hue > 360) hue = 0;
-    
-    // Super subtle mouse glow
-    if (mouse.isMoving) {
-        ctx.save();
-        const glowGradient = ctx.createRadialGradient(
-            mouse.x, mouse.y, 0,
-            mouse.x, mouse.y, 200
-        );
-        glowGradient.addColorStop(0, `hsla(${hue}, 100%, 50%, 0.05)`);
-        glowGradient.addColorStop(0.5, `hsla(${hue}, 100%, 50%, 0.02)`);
-        glowGradient.addColorStop(1, 'transparent');
+    // Generate smoke particles at regular intervals
+    smokeGenerationTimer++;
+    if (smokeGenerationTimer > 15) {
+        smokeGenerationTimer = 0;
         
-        ctx.fillStyle = glowGradient;
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.restore();
+        // Generate from bottom of screen
+        if (Math.random() > 0.3) {
+            smokeParticles.push(new SmokeParticle(
+                Math.random() * canvas.width,
+                canvas.height + 50
+            ));
+        }
+        
+        // Generate from sides occasionally
+        if (Math.random() > 0.7) {
+            const side = Math.random() > 0.5 ? 0 : canvas.width;
+            smokeParticles.push(new SmokeParticle(
+                side,
+                canvas.height * 0.7 + Math.random() * canvas.height * 0.3
+            ));
+        }
     }
     
-    // Limit particles for performance
-    if (particles.length > 150) {
-        particles.splice(0, particles.length - 150);
+    // Generate smoke when mouse moves
+    if (isMouseMoving && Math.random() > 0.7) {
+        const particle = new SmokeParticle(
+            mouseX + (Math.random() - 0.5) * 50,
+            mouseY + (Math.random() - 0.5) * 50
+        );
+        particle.targetOpacity = 0.04;
+        particle.size = 30;
+        smokeParticles.push(particle);
+    }
+    
+    // Update and draw smoke particles
+    for (let i = smokeParticles.length - 1; i >= 0; i--) {
+        const particle = smokeParticles[i];
+        particle.update();
+        
+        if (particle.opacity > 0) {
+            particle.draw();
+        } else {
+            // Remove dead particles
+            smokeParticles.splice(i, 1);
+        }
+    }
+    
+    // Add subtle vignette effect
+    const vignette = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 0,
+        canvas.width / 2, canvas.height / 2, canvas.width * 0.7
+    );
+    vignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    vignette.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Limit smoke particles for performance
+    if (smokeParticles.length > 40) {
+        smokeParticles.splice(0, smokeParticles.length - 40);
     }
     
     requestAnimationFrame(animate);
 }
 
-// Start smooth animation
+// Start animation
 animate();
 
-// Gentle welcome effect
+// Initial smoke burst
 setTimeout(() => {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    for (let i = 0; i < 20; i++) {
-        const angle = (Math.PI * 2 * i) / 20;
-        const particle = new Particle(centerX, centerY, i * 18);
-        particle.speedX = Math.cos(angle) * 2;
-        particle.speedY = Math.sin(angle) * 2;
-        particle.size = 2;
-        particles.push(particle);
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            smokeParticles.push(new SmokeParticle(
+                canvas.width / 2 + (Math.random() - 0.5) * 200,
+                canvas.height * 0.7
+            ));
+        }, i * 200);
     }
-}, 500);
+}, 1000);
