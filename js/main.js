@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'color: #10b981; font-size: 20px; font-weight: bold;');
     console.log('%c Looking for an automation architect? Let\'s build something amazing together!', 
         'color: #9333ea; font-size: 14px;');
-    console.log('%c Email: ben@benlorenzo.dev | TambayanPH: https://tambayanph.com', 
+    console.log('%c Email: benlorenzo.dev@gmail.com | TambayanPH: https://tambayanph.com', 
         'color: #3b82f6; font-size: 12px;');
     console.log('%c Fun fact: Try the Konami code on the site! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA', 
         'color: #ec4899; font-size: 12px;');

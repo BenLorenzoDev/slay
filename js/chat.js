@@ -56,6 +56,7 @@ const responses = {
             "Ah, TambayanPH! My passion project! 🇵🇭",
             "**TambayanPH** is our Filipino community for automation builders. 'Tambayan' means hangout spot - and that's exactly what we created!",
             "We're a group of Filipino freelancers, agency owners, and tech enthusiasts learning and growing together in the automation space.",
+            "Check us out at https://tambayanph.com/ and follow our Facebook page at https://www.facebook.com/TambyanPH!",
             "**What we do:**\n• Weekly n8n workshops in Taglish\n• Workflow sharing sessions\n• Client project collaborations\n• Mentorship programs for beginners",
             "The best part? We help each other land international clients. When one of us wins, we all win! 🎯",
             "We believe Filipinos have incredible potential in the global automation market. We just need to support each other and level up together.",
@@ -70,7 +71,7 @@ const responses = {
             "**My ideal client:**\n• Service-based businesses ready to scale\n• Agencies looking for white-label automation\n• Startups needing MVP automation\n• Teams tired of manual, repetitive tasks",
             "**How I work:**\n• Discovery call to understand your needs\n• Propose a no-fluff solution\n• Build, test, and iterate\n• Document everything\n• Train your team",
             "**Rates:** Project-based or retainer options available. I believe in fair pricing that delivers ROI.",
-            "Ready to automate your way to success? Click that 'Contact Me' button up top or shoot me an email at ben@benlorenzo.dev 📧",
+            "Ready to automate your way to success? Click that 'Contact Me' button up top or shoot me an email at benlorenzo.dev@gmail.com 📧",
             "PS: I also offer special rates for Filipino startups. Supportahan natin ang ating mga kababayan! 🇵🇭"
         ]
     }
@@ -181,7 +182,7 @@ function handleCustomMessage(message) {
              lowerMessage.includes('project') || lowerMessage.includes('cost')) {
         return [
             "Great! I'd love to discuss how I can help! 🚀",
-            "You can reach me at ben@benlorenzo.dev or click the 'Contact Me' button above.",
+            "You can reach me at benlorenzo.dev@gmail.com or click the 'Contact Me' button above.",
             "Let's set up a discovery call to understand your needs better!"
         ];
     }
@@ -209,7 +210,7 @@ function handleCustomMessage(message) {
     else {
         return [
             "That's a great question! 🤔",
-            "While I don't have a specific answer ready for that, feel free to email me at ben@benlorenzo.dev",
+            "While I don't have a specific answer ready for that, feel free to email me at benlorenzo.dev@gmail.com",
             "Or explore the topics above to learn more about what I do!"
         ];
     }
