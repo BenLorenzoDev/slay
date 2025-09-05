@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Interactive Chat Experience</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="galaxy-canvas"></canvas>
+    <div class="hero-container">
+        <!-- Left Side - Profile Image -->
+        <div class="profile-section">
+            <div class="profile-image-wrapper">
+                <img src="assets/images/me.jpg" alt="Profile Picture" class="profile-image">
+                <div class="profile-status">
+                    <span class="status-dot"></span>
+                    <span>Available for opportunities</span>
+                </div>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name">Meet Ben!</h1>
+                <p class="profile-title">Workflow & Automation Architect</p>
+            </div>
+        </div>
+
+        <!-- Middle - Interactive Chatbox -->
+        <div class="chat-section">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar">
+                            <span>YN</span>
+                        </div>
+                        <div class="chat-header-text">
+                            <h3>Chat with Me</h3>
+                            <p>Active now</p>
+                        </div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button class="minimize-btn">−</button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message appear">
+                        <div class="message-content">
+                            <p>Hi! Welcome to my portfolio! 👋</p>
+                        </div>
+                    </div>
+                    <div class="message bot-message appear">
+                        <div class="message-content">
+                            <p>I'm excited to share my journey with you. What would you like to know?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="quick-actions-label">Quick questions:</div>
+                    <div class="quick-buttons">
+                        <button class="quick-btn" data-action="about">
+                            <span class="btn-icon">👤</span>
+                            About Me
+                        </button>
+                        <button class="quick-btn" data-action="superpowers">
+                            <span class="btn-icon">⚡</span>
+                            My Superpowers
+                        </button>
+                        <button class="quick-btn" data-action="projects">
+                            <span class="btn-icon">💼</span>
+                            Recent Projects
+                        </button>
+                        <button class="quick-btn" data-action="experience">
+                            <span class="btn-icon">🎯</span>
+                            Experience
+                        </button>
+                        <button class="quick-btn" data-action="contact">
+                            <span class="btn-icon">📧</span>
+                            Let's Connect
+                        </button>
+                        <button class="quick-btn" data-action="fun">
+                            <span class="btn-icon">🎮</span>
+                            Fun Facts
+                        </button>
+                        <button class="quick-btn" data-action="availability">
+                            <span class="btn-icon">🚀</span>
+                            Work Availability
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" placeholder="Type a message..." id="chatInput">
+                    <button class="send-btn" id="sendBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="attribution">Inspired by Mark Renzo</div>
+
+    <script src="js/main.js"></script>
+    <script src="js/galaxy.js"></script>
+</body>
+</html>
