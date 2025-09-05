@@ -453,59 +453,197 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
     .hero-container {
         gap: 2rem;
+        max-width: 100%;
+    }
+    
+    .chat-section {
+        max-width: 800px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .hero-container {
+        gap: 1.5rem;
+        padding: 1rem;
     }
     
     .profile-section {
-        flex: 0 0 300px;
+        flex: 0 0 350px;
     }
     
     .profile-image {
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
     }
     
     .profile-name {
         font-size: 2rem;
+    }
+    
+    .chat-section {
+        max-width: 700px;
     }
 }
 
 @media (max-width: 992px) {
     .hero-container {
         flex-direction: column;
-        height: auto;
-        padding: 2rem 1rem;
+        height: 100vh;
+        padding: 1rem;
+        gap: 1rem;
     }
     
     .profile-section {
         flex: none;
-        margin-bottom: 2rem;
+        margin-bottom: 0;
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    
+    .profile-image-wrapper {
+        margin-bottom: 0;
+    }
+    
+    .profile-image {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .profile-status {
+        display: none;
+    }
+    
+    .profile-info {
+        text-align: left;
+    }
+    
+    .profile-name {
+        font-size: 1.8rem;
+    }
+    
+    .profile-title {
+        font-size: 1rem;
     }
     
     .chat-section {
         width: 100%;
-        height: 600px;
+        max-width: 100%;
+        flex: 1;
+        height: auto;
+        min-height: 400px;
+    }
+    
+    .chat-container {
+        height: 100%;
     }
 }
 
-@media (max-width: 576px) {
-    .quick-buttons {
-        display: flex;
-        overflow-x: auto;
-    }
-    
+@media (max-width: 768px) {
     .profile-image {
-        width: 150px;
-        height: 150px;
+        width: 100px;
+        height: 100px;
     }
     
     .profile-name {
         font-size: 1.5rem;
     }
     
-    .chat-section {
-        height: 500px;
+    .profile-title {
+        font-size: 0.9rem;
+    }
+    
+    .chat-messages {
+        padding: 1rem;
+    }
+    
+    .quick-actions {
+        padding: 0.75rem 1rem;
+    }
+    
+    .quick-btn {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-container {
+        padding: 0.5rem;
+    }
+    
+    .profile-section {
+        gap: 1rem;
+    }
+    
+    .profile-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .profile-name {
+        font-size: 1.3rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .profile-title {
+        font-size: 0.85rem;
+    }
+    
+    .chat-header {
+        padding: 1rem;
+    }
+    
+    .chat-messages {
+        padding: 0.75rem;
+    }
+    
+    .message-content {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.9rem;
+    }
+    
+    .quick-actions-label {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .quick-buttons {
+        display: flex;
+        overflow-x: auto;
+        gap: 0.4rem;
+    }
+    
+    .quick-btn {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.75rem;
+    }
+    
+    .btn-icon {
+        font-size: 0.9rem;
+    }
+    
+    .chat-input {
+        padding: 1rem;
+    }
+    
+    #chatInput {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.9rem;
+    }
+    
+    .send-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .attribution {
+        font-size: 0.6rem;
+        bottom: 5px;
+        right: 5px;
     }
 }
