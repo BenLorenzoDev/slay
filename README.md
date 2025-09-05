@@ -111,7 +111,7 @@ slay/
 
 ## 🌏 TambayanPH Community
 
-**TambayanPH** is a Filipino community for automation builders, founded by Ben Lorenzo Magbanua. It's a space where Filipino freelancers, agency owners, and tech enthusiasts learn and grow together in the automation space.
+**TambayanPH** is a Filipino community for automation builders, co-founded by Ben Lorenzo Magbanua, Jude Telan, and Emil Halili. It's a space where Filipino freelancers, agency owners, and tech enthusiasts learn and grow together in the automation space.
 
 - 🌐 Website: [https://tambayanph.com/](https://tambayanph.com/)
 - 📘 Facebook: [https://www.facebook.com/TambyanPH](https://www.facebook.com/TambyanPH)
