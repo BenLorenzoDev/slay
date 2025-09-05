@@ -104,7 +104,7 @@ function addMessage(message, isUser = false) {
     const formattedMessage = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     messageDiv.innerHTML = `
-        <div class="message-content">
+        <div class="message-bubble">
             <p>${formattedMessage.replace(/\n/g, '<br>')}</p>
         </div>
     `;
@@ -210,14 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Add minimize functionality
-document.querySelector('.minimize-btn').addEventListener('click', () => {
-    const chatContainer = document.querySelector('.chat-container');
-    chatContainer.style.transition = 'all 0.3s ease';
-    
-    if (chatContainer.style.transform === 'scale(0.9)') {
-        chatContainer.style.transform = 'scale(1)';
-    } else {
-        chatContainer.style.transform = 'scale(0.9)';
-    }
-});
+// Scroll to top when page loads on chat section
+if (window.location.hash === '#chat') {
+    document.getElementById('chatMessages').scrollTop = 0;
+}

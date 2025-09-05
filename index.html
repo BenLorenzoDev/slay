@@ -42,71 +42,70 @@
 
     <!-- Section 2: Full Page Chat -->
     <section class="chat-fullpage" id="chat">
-        <div class="chat-container-wrapper">
-            <div class="chat-container">
-                <div class="chat-header">
-                    <div class="chat-header-info">
-                        <div class="chat-avatar">
-                            <span>BL</span>
-                        </div>
-                        <div class="chat-header-text">
-                            <h3>Chat with Ben</h3>
-                            <p>Active now</p>
-                        </div>
-                    </div>
-                    <div class="chat-header-actions">
-                        <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
-                    </div>
+        <!-- Floating header with minimal info -->
+        <div class="chat-header-minimal">
+            <div class="chat-info">
+                <div class="chat-avatar">
+                    <span>BL</span>
                 </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message bot-message appear">
-                        <div class="message-content">
-                            <p>Hi! Welcome to my portfolio! 👋</p>
-                        </div>
-                    </div>
-                    <div class="message bot-message appear">
-                        <div class="message-content">
-                            <p>I'm excited to share my journey with you. What would you like to know?</p>
-                        </div>
-                    </div>
+                <div class="chat-status">
+                    <h3>Ben Lorenzo</h3>
+                    <p>Active now</p>
                 </div>
+            </div>
+            <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+        </div>
 
-                <div class="quick-actions">
-                    <div class="quick-actions-label">Quick questions:</div>
+        <!-- Chat messages area - full page -->
+        <div class="chat-messages-fullpage" id="chatMessages">
+            <div class="message bot-message appear">
+                <div class="message-bubble">
+                    <p>Hi! Welcome to my portfolio! 👋</p>
+                </div>
+            </div>
+            <div class="message bot-message appear">
+                <div class="message-bubble">
+                    <p>I'm excited to share my journey with you. What would you like to know?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed bottom input area -->
+        <div class="chat-bottom-fixed">
+            <div class="chat-bottom-container">
+                <div class="quick-actions-minimal">
                     <div class="quick-buttons">
                         <button class="quick-btn" data-action="about">
                             <span class="btn-icon">👤</span>
-                            About Me
+                            <span class="btn-text">About Me</span>
                         </button>
                         <button class="quick-btn" data-action="superpowers">
                             <span class="btn-icon">⚡</span>
-                            My Superpowers
+                            <span class="btn-text">My Superpowers</span>
                         </button>
                         <button class="quick-btn" data-action="projects">
                             <span class="btn-icon">💼</span>
-                            Recent Projects
+                            <span class="btn-text">Recent Projects</span>
                         </button>
                         <button class="quick-btn" data-action="experience">
                             <span class="btn-icon">🎯</span>
-                            Experience
+                            <span class="btn-text">Experience</span>
                         </button>
                         <button class="quick-btn" data-action="contact">
                             <span class="btn-icon">📧</span>
-                            Let's Connect
+                            <span class="btn-text">Let's Connect</span>
                         </button>
                         <button class="quick-btn" data-action="fun">
                             <span class="btn-icon">🎮</span>
-                            Fun Facts
+                            <span class="btn-text">Fun Facts</span>
                         </button>
                         <button class="quick-btn" data-action="availability">
                             <span class="btn-icon">🚀</span>
-                            Work Availability
+                            <span class="btn-text">Work Availability</span>
                         </button>
                     </div>
                 </div>
-
-                <div class="chat-input">
+                <div class="chat-input-area">
                     <input type="text" placeholder="Type a message..." id="chatInput">
                     <button class="send-btn" id="sendBtn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
